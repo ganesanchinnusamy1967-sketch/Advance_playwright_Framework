@@ -1,0 +1,45 @@
+{
+  "name": "advance_playwright_framework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --grep @ui",
+    "test:e2e": "npx playwright test --grep @e2e",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:debug": "npx playwright test --debug",
+    "test:p0": "npx playwright test --grep @P0",
+    "test:p1": "npx playwright test --grep @P1",
+    "test:report": "npx playwright show-report",
+    "lint": "npx eslint . --ext .ts,.js",
+    "typecheck": "npx tsc --noEmit",
+    "format": "npx prettier --check \"**/*.{ts,js,json,md}\"",
+    "format:fix": "npx prettier --write \"**/*.{ts,js,json,md}\"",
+    "build": "npx tsc -p .",
+    "clean": "rimraf ./dist ./build ./test-results ./playwright-report",
+    "prepare": "npx playwright install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "allure-playwright": "^3.10.2",
+    "csv-parse": "^7.0.0",
+    "dotenv": "^17.4.2",
+    "eslint": "^8.57.0",
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.7.0",
+    "xlsx": "^0.18.5"
+  }
+}
