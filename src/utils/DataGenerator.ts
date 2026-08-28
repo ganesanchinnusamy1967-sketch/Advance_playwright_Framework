@@ -1,73 +1,71 @@
 import { faker } from '@faker-js/faker';
 
-export type UserCredentials = {
-  username: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
+export type Credentials = {
+	username: string;
+	password: string;
+	firstName?: string;
+	lastName?: string;
+	email?: string;
 };
 
 /**
- * Generate a single set of user credentials for use in login tests.
- * Accepts optional overrides to pin any of the fields.
+ * Generate a realistic-looking username and password for TTA Cart tests.
+ * Returns a small object with `username` and `password` fields and optional profile data.
  */
-export function generateCredentials(overrides: Partial<UserCredentials> = {}): UserCredentials {
-  const firstName = overrides.firstName ?? faker.person.firstName();
-  const lastName = overrides.lastName ?? faker.person.lastName();
-  const username = overrides.username ?? String(faker.internet.userName({ firstName, lastName }));
-  const password = overrides.password ?? faker.internet.password({ length: 10 });
-  const email = overrides.email ?? String(faker.internet.email({ firstName, lastName }));
+export function generateCredentials(overrides: Partial<Credentials> = {}): Credentials {
+	const firstName = overrides.firstName ?? faker.person.firstName();
+	const lastName = overrides.lastName ?? faker.person.lastName();
+	// build a readable username using first/last parts
+	const baseUsername = `${firstName}.${lastName}`.toLowerCase().replace(/\s+/g, '_');
+	const username = overrides.username ?? `${baseUsername}${faker.number.int({ min: 1, max: 999 })}`;
+	const password = overrides.password ?? faker.internet.password({ length: 12 });
+	const email = overrides.email ?? faker.internet.email({ firstName, lastName }).toString();
 
-  return {
-    username,
-    password,
-    firstName,
-    lastName,
-    email,
-  };
+	return {
+		username,
+		password,
+		firstName,
+		lastName,
+		email,
+	};
 }
 
 /**
- * Convenience helper to generate multiple credentials at once.
+ * Simple helper that returns only username/password suitable for quick login calls.
  */
-export function generateUsers(count = 1, overrides: Partial<UserCredentials> = {}) {
-  const users: UserCredentials[] = [];
-  for (let i = 0; i < count; i++) {
-    users.push(generateCredentials(overrides));
-  }
-  return users;
+export function fakeLogin(overrides: Partial<Credentials> = {}): Pick<Credentials, 'username' | 'password'> {
+	const creds = generateCredentials(overrides);
+	return { username: creds.username, password: creds.password };
+}
+
+/**
+ * Known stable accounts you can use when a deterministic user is required.
+ * Update these if you have canonical test accounts for the TTA Cart application.
+ */
+export const knownAccounts = {
+	stable: { username: 'test_user', password: 'Password123!' },
+	demo: { username: 'demo_user', password: 'DemoPass123!' },
+};
+
+/**
+ * Return a stable test account to use when a known user is required.
+ */
+export function stableTestLogin(): Credentials {
+	const a = knownAccounts.stable;
+	return { username: a.username, password: a.password };
 }
 
 /**
  * Build the payload object commonly used to submit the login form.
- * This mirrors the fields used by the `LoginPage` page object.
  */
-export function buildLoginPayload(creds: UserCredentials) {
-  return {
-    username: creds.username,
-    password: creds.password,
-  };
-}
-
-/**
- * Some test suites prefer a deterministic, known user. This returns a
- * predictable user object you can use when a stable account is required.
- * Update these values if you have a canonical test account for the app.
- */
-export function knownTestUser() : UserCredentials {
-  return {
-    username: 'test_user',
-    password: 'Password123!',
-    firstName: 'Test',
-    lastName: 'User',
-    email: 'test.user@example.com',
-  };
+export function buildLoginPayload(creds: Pick<Credentials, 'username' | 'password'>) {
+	return { username: creds.username, password: creds.password };
 }
 
 export default {
-  generateCredentials,
-  generateUsers,
-  buildLoginPayload,
-  knownTestUser,
+	generateCredentials,
+	fakeLogin,
+	stableTestLogin,
+	knownAccounts,
+	buildLoginPayload,
 };
