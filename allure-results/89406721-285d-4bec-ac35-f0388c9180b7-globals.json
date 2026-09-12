@@ -1,0 +1,1 @@
+{"attachments":[],"errors":[{"message":"beforeEach hook failed: TypeError: Cannot read properties of undefined (reading 'standard_user')","trace":"TypeError: Cannot read properties of undefined (reading 'standard_user')\n    at D:\\Advance_playwright_Framework\\src\\tests\\e2e-checkout.spec.ts:27:45","timestamp":1788777335845}]}

@@ -1,0 +1,3 @@
+2026-09-01 12:36:44 [info] [LoginPage] navigateTo /playwright/ttacart/index.html
+2026-09-01 12:36:49 [info] [LoginPage] Login attempt for user: standard_user
+2026-09-01 12:36:49 [info] [LoginPage] Login succeeded for standard_user

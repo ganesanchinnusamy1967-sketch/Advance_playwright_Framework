@@ -74,11 +74,12 @@ export default defineConfig({
     }],
     ['list'],
   ],/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-   use: {
-    baseURL: resolveBaseURL(),
-    screenshot: 'only-on-failure',
-    video: 'on',
-    trace: 'on-first-retry',
+  use: {
+   baseURL: resolveBaseURL(),
+   // Capture screenshot and video for every test run so reports have full artifacts
+   screenshot: 'on',
+   video: 'on',
+   trace: 'on-first-retry',
     actionTimeout: 15_000,
     navigationTimeout: 30_000,
     extraHTTPHeaders: {

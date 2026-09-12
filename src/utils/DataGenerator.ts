@@ -1,71 +1,109 @@
+/**
+ * DataGenerator — Faker-backed fake data for the TTACart project.
+ *
+ * TTACart is a SauceDemo-style storefront: it needs login credentials and
+ * checkout customer info (first name, last name, postal code). This util
+ * centralises all random data so tests stay deterministic-friendly (one
+ * import) and read naturally.
+ *
+ * Faker v8 API notes (project is CommonJS, so we pin the dual CJS/ESM v8):
+ *   - `faker.internet.userName()`        (lowercase `username()` is v9+ only)
+ *   - `faker.internet.password({length})` (v8 options-object form; avoids the
+ *      deprecated positional overload)
+ *   - `faker.location.zipCode()`         (v8 renamed `address` -> `location`)
+ */
+
 import { faker } from '@faker-js/faker';
 
-export type Credentials = {
-	username: string;
-	password: string;
-	firstName?: string;
-	lastName?: string;
-	email?: string;
-};
-
-/**
- * Generate a realistic-looking username and password for TTA Cart tests.
- * Returns a small object with `username` and `password` fields and optional profile data.
- */
-export function generateCredentials(overrides: Partial<Credentials> = {}): Credentials {
-	const firstName = overrides.firstName ?? faker.person.firstName();
-	const lastName = overrides.lastName ?? faker.person.lastName();
-	// build a readable username using first/last parts
-	const baseUsername = `${firstName}.${lastName}`.toLowerCase().replace(/\s+/g, '_');
-	const username = overrides.username ?? `${baseUsername}${faker.number.int({ min: 1, max: 999 })}`;
-	const password = overrides.password ?? faker.internet.password({ length: 12 });
-	const email = overrides.email ?? faker.internet.email({ firstName, lastName }).toString();
-
-	return {
-		username,
-		password,
-		firstName,
-		lastName,
-		email,
-	};
+export interface Credentials {
+    username: string;
+    password: string;
 }
 
-/**
- * Simple helper that returns only username/password suitable for quick login calls.
- */
-export function fakeLogin(overrides: Partial<Credentials> = {}): Pick<Credentials, 'username' | 'password'> {
-	const creds = generateCredentials(overrides);
-	return { username: creds.username, password: creds.password };
+export interface CheckoutCustomer {
+    firstName: string;
+    lastName: string;
+    postalCode: string;
 }
 
-/**
- * Known stable accounts you can use when a deterministic user is required.
- * Update these if you have canonical test accounts for the TTA Cart application.
- */
-export const knownAccounts = {
-	stable: { username: 'test_user', password: 'Password123!' },
-	demo: { username: 'demo_user', password: 'DemoPass123!' },
-};
-
-/**
- * Return a stable test account to use when a known user is required.
- */
-export function stableTestLogin(): Credentials {
-	const a = knownAccounts.stable;
-	return { username: a.username, password: a.password };
+export interface UserProfile extends Credentials, CheckoutCustomer {
+    email: string;
+    fullName: string;
+    phone: string;
 }
 
-/**
- * Build the payload object commonly used to submit the login form.
- */
-export function buildLoginPayload(creds: Pick<Credentials, 'username' | 'password'>) {
-	return { username: creds.username, password: creds.password };
+export class DataGenerator {
+    // ---------- credentials ----------
+
+    /** Random username, e.g. "Otilia35". */
+    static username(): string {
+        return faker.internet.userName();
+    }
+
+    /**
+     * Random password. Defaults to a 12-char password.
+     * Pass length to tune for negative-test cases.
+     */
+    static password(length = 12): string {
+        return faker.internet.password({ length });
+    }
+
+    /** Username + password pair. */
+    static credentials(): Credentials {
+        return {
+            username: DataGenerator.username(),
+            password: DataGenerator.password(),
+        };
+    }
+
+    // ---------- contact ----------
+
+    static firstName(): string {
+        return faker.person.firstName();
+    }
+
+    static lastName(): string {
+        return faker.person.lastName();
+    }
+
+    static email(): string {
+        return faker.internet.email();
+    }
+
+    static phone(): string {
+        return faker.phone.number();
+    }
+
+    static postalCode(): string {
+        return faker.location.zipCode();
+    }
+
+    // ---------- composites ----------
+
+    /** Customer info for the TTACart checkout step-one form. */
+    static checkoutCustomer(): CheckoutCustomer {
+        return {
+            firstName: DataGenerator.firstName(),
+            lastName: DataGenerator.lastName(),
+            postalCode: DataGenerator.postalCode(),
+        };
+    }
+
+    /** Full profile — creds + checkout fields + contact. */
+    static userProfile(): UserProfile {
+        const firstName = DataGenerator.firstName();
+        const lastName = DataGenerator.lastName();
+        return {
+            username: DataGenerator.username(),
+            password: DataGenerator.password(),
+            firstName,
+            lastName,
+            fullName: `${firstName} ${lastName}`,
+            email: faker.internet.email({ firstName, lastName }),
+            phone: DataGenerator.phone(),
+            postalCode: DataGenerator.postalCode(),
+        };
+    }
 }
 
-export default {
-	generateCredentials,
-	fakeLogin,
-	stableTestLogin,
-	knownAccounts,
-	buildLoginPayload,
-};
+export default DataGenerator;

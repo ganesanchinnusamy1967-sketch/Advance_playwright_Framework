@@ -1,0 +1,1 @@
+[{"values":["qa"],"name":"Environment"},{"values":["https://app.thetestingacademy.com"],"name":"BaseURL"},{"values":["v24.12.0"],"name":"Node"},{"values":["win32"],"name":"OS"},{"values":["false"],"name":"CI"}]

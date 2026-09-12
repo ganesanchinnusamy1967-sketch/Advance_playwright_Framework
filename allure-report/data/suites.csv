@@ -1,0 +1,5 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","26","get started link","chromium","2026-08-24","skipped","2026-08-24","","example.spec.ts","",""
+"","98","complete checkout happy-path","chromium","2026-09-07","skipped","2026-09-07","E2E checkout flow","e2e-checkout.spec.ts","",""
+"","45","has title","chromium","2026-08-24","skipped","2026-08-24","","example.spec.ts","",""
+"","6349","can login with valid credentials","chromium","2026-09-01","passed","2026-09-01","LoginPage tests","Loginpage.spec.ts","",""

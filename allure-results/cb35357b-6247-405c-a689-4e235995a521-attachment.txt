@@ -1,0 +1,11 @@
+2026-09-07 16:32:09 [info] [LoginPage] navigateTo /playwright/ttacart/index.html
+2026-09-07 16:32:12 [info] [LoginPage] Login attempt for user: standard_user
+2026-09-07 16:32:20 [info] [LoginPage] Login succeeded for standard_user
+2026-09-07 16:32:20 [info] [E2E-Checkout] Step 2: navigating to the inventory page
+2026-09-07 16:32:20 [info] [InventoryPage] navigateTo /playwright/ttacart/inventory.html
+2026-09-07 16:32:24 [info] [E2E-Checkout] Step 3: adding item "test-allthethings-tshirt-red" to the cart
+2026-09-07 16:32:26 [info] [E2E-Checkout] Step 4: opening the cart and verifying one row
+2026-09-07 16:32:26 [info] [CartPage] navigateTo /playwright/ttacart/cart.html
+2026-09-07 16:32:32 [info] [E2E-Checkout] Step 5a: filling guest details for Dasia Howe
+2026-09-07 16:32:41 [info] [E2E-Checkout] Step 5b: reviewing the overview and finishing the order
+2026-09-07 16:32:46 [info] [E2E-Checkout] Step 6: asserting the order is complete
