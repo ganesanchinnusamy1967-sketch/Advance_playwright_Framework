@@ -83,18 +83,18 @@ export default defineConfig({
     actionTimeout: 15_000,
     navigationTimeout: 30_000,
     extraHTTPHeaders: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
   },
   projects: [
     {
       name: 'api',
-      testMatch: /src\/tests\/apiTests\/.*\.spec\.ts/,
+      testMatch: /src\/tests\/api-Tests\/.*\.spec\.ts/,
     },
     {
       name: 'chromium',
-      testIgnore: /src\/tests\/apiTests\/.*\.spec\.ts/,
+      testIgnore: /src\/tests\/api-Tests\/.*\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
     // { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
