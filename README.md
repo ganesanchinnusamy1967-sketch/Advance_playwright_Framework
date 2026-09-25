@@ -27,12 +27,14 @@ Advance_playwright_Framework/
 │   └── README.md
 ├── src/
 │   ├── api/
+│   │   └── restfulBookerApi.ts
 │   ├── config/
 │   ├── fixtures/
 │   ├── pages/
 │   ├── testdata/
 │   ├── tests/
 │   └── utils/
+│       └── ApiHelper.ts
 ├── AGENTS.md
 ├── .env
 ├── .gitignore
@@ -62,6 +64,7 @@ Advance_playwright_Framework/
   - list reporter
 - TypeScript strict configuration and path aliases
 - Winston logger with `logger` and `createLogger(scope)` support
+- Restful Booker API client with typed create, read, update, delete, and authentication operations
 - Validation guidance for new tests
 
 ## Important rules
@@ -89,6 +92,9 @@ npx playwright test
 npx playwright test --project=chromium
 npx playwright test --project=firefox
 npx playwright test --debug
+npx playwright test src/tests/api-Tests/02_restfulapibooker_apiHelper --project=api
+npx playwright test src/tests/api-Tests/01_restfulapibooker_raw --project=api
+npx playwright show-report
 npm run typecheck
 npm run lint
 npm run test:report
@@ -103,6 +109,26 @@ The framework supports environment-based configuration through `.env` and env va
 ```bash
 TTA_ENV=qa
 BASE_URL=https://app.thetestingacademy.com
+```
+
+For Restful Booker API tests, set the base URL in PowerShell before running the
+API project:
+
+```powershell
+$env:BASE_URL = "https://restful-booker.herokuapp.com"
+npx playwright test src/tests/api-Tests/02_restfulapibooker_apiHelper --project=api
+```
+
+The API tests cover authentication and the booking CRUD flow:
+
+- `create_booking.spec.ts` creates a booking and validates the response
+- `update_booking.spec.ts` creates and updates a booking with a cookie token
+- `delete_booking.spec.ts` creates and deletes a booking with a cookie token
+
+The HTML report is generated in `playwright-report/` and can be opened with:
+
+```bash
+npx playwright show-report
 ```
 
 ## Notes
